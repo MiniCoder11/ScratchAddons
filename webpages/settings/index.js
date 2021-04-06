@@ -49,6 +49,7 @@ const ColorInput = Vue.extend({
   },
   methods: {
     toggle(addon, setting, value = !this.isOpen) {
+      if (addon._enabled) {
       this.isOpen = value;
       this.opening = true;
       for (let child of this.$root.$children) {
@@ -67,6 +68,7 @@ const ColorInput = Vue.extend({
       setTimeout(() => {
         this.canCloseOutside = true;
       }, 0);
+    }
     },
   },
   watch: {
@@ -689,6 +691,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     await vue.popupOrderAddonsEnabledFirst();
   }
   vue.loaded = true;
+  import('../../libraries/color-picker.js');
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
   setTimeout(handleKeySettings, 0);
   setTimeout(() => {
