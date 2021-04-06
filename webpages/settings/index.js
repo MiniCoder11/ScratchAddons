@@ -50,25 +50,25 @@ const ColorInput = Vue.extend({
   methods: {
     toggle(addon, setting, value = !this.isOpen) {
       if (addon._enabled) {
-      this.isOpen = value;
-      this.opening = true;
-      for (let child of this.$root.$children) {
-        if (child.isOpen && child.canCloseOutside && child.color && !child.opening) {
-          child.toggle(child.addon, child.setting, false);
+        this.isOpen = value;
+        this.opening = true;
+        for (let child of this.$root.$children) {
+          if (child.isOpen && child.canCloseOutside && child.color && !child.opening) {
+            child.toggle(child.addon, child.setting, false);
+          }
         }
-      }
-      this.opening = false;
+        this.opening = false;
 
-      this.color = "#" + this.$els.pickr.hex8;
-      if (this.value !== this.color) {
-        this.$parent.addonSettings[addon._addonId][setting.id] = "#" + this.$els.pickr.hex8;
-        this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
+        this.color = "#" + this.$els.pickr.hex8;
+        if (this.value !== this.color) {
+          this.$parent.addonSettings[addon._addonId][setting.id] = "#" + this.$els.pickr.hex8;
+          this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
+        }
+        this.canCloseOutside = false;
+        setTimeout(() => {
+          this.canCloseOutside = true;
+        }, 0);
       }
-      this.canCloseOutside = false;
-      setTimeout(() => {
-        this.canCloseOutside = true;
-      }, 0);
-    }
     },
   },
   watch: {
@@ -691,7 +691,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     await vue.popupOrderAddonsEnabledFirst();
   }
   vue.loaded = true;
-  import('../../libraries/color-picker.js');
+  import("../../libraries/color-picker.js");
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
   setTimeout(handleKeySettings, 0);
   setTimeout(() => {
